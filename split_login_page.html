@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sign In</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500;700&display=swap');
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: linear-gradient(135deg, #1565c0 0%, #1976d2 40%, #42a5f5 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  width: 820px;
+  max-width: 96vw;
+  min-height: 440px;
+  background: #fff;
+  border-radius: 20px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(10,60,160,0.35);
+  animation: cardIn 0.55s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes cardIn {
+  from { opacity:0; transform: scale(0.92) translateY(28px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+
+/* LEFT PANEL */
+.left-panel {
+  width: 42%;
+  background: linear-gradient(145deg, #1565c0 0%, #1976d2 55%, #1e88e5 100%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 40px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Decorative blobs */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+}
+.blob-1 {
+  width: 200px; height: 200px;
+  bottom: -60px; left: -60px;
+  background: rgba(255,255,255,0.10);
+  animation: floatBlob 6s ease-in-out infinite;
+}
+.blob-2 {
+  width: 130px; height: 130px;
+  bottom: 40px; left: 90px;
+  background: rgba(255,255,255,0.14);
+  animation: floatBlob 8s ease-in-out infinite reverse;
+}
+.blob-3 {
+  width: 90px; height: 90px;
+  top: -30px; right: -30px;
+  background: rgba(255,255,255,0.09);
+  animation: floatBlob 7s ease-in-out infinite 2s;
+}
+.blob-4 {
+  width: 55px; height: 55px;
+  top: 60px; left: 20px;
+  background: rgba(255,255,255,0.08);
+  animation: floatBlob 5s ease-in-out infinite 1s;
+}
+
+/* 3D sphere effect */
+.sphere {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #5baaf7, #1565c0 55%, #0d3d8a 100%);
+  box-shadow: inset -6px -6px 18px rgba(0,0,0,0.35), inset 4px 4px 12px rgba(255,255,255,0.18), 0 8px 30px rgba(10,50,140,0.4);
+}
+
+@keyframes floatBlob {
+  0%,100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-12px) scale(1.04); }
+}
+
+.left-text {
+  position: relative; z-index: 2;
+}
+.left-text h2 {
+  font-size: 30px; font-weight: 700;
+  color: #fff; letter-spacing: 1px;
+  margin-bottom: 6px;
+  animation: slideUp 0.6s ease both 0.2s;
+}
+.left-text p.sub {
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 14px;
+  animation: slideUp 0.6s ease both 0.3s;
+}
+.left-text p.desc {
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.7;
+  animation: slideUp 0.6s ease both 0.4s;
+}
+
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(16px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* RIGHT PANEL */
+.right-panel {
+  flex: 1;
+  padding: 44px 44px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.right-panel h1 {
+  font-size: 26px; font-weight: 700;
+  color: #111; margin-bottom: 4px;
+  animation: fadeIn 0.5s ease both 0.3s;
+}
+.right-panel .tagline {
+  font-size: 12px; color: #888;
+  margin-bottom: 28px;
+  animation: fadeIn 0.5s ease both 0.4s;
+}
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.field-wrap {
+  position: relative;
+  margin-bottom: 16px;
+  animation: fadeIn 0.5s ease both;
+}
+.field-wrap:nth-child(1) { animation-delay: 0.45s; }
+.field-wrap:nth-child(2) { animation-delay: 0.52s; }
+
+.field-icon {
+  position: absolute; left: 12px; top: 50%;
+  transform: translateY(-50%);
+  color: #1565c0; font-size: 16px; pointer-events: none;
+}
+.field-input {
+  width: 100%;
+  border: 1.5px solid #dde3f0;
+  border-radius: 8px;
+  padding: 11px 44px 11px 40px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #222;
+  outline: none;
+  background: #f7f9fc;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.field-input::placeholder { color: #aab; font-size: 13px; }
+.field-input:focus {
+  border-color: #1565c0;
+  box-shadow: 0 0 0 3px rgba(21,101,192,0.1);
+  background: #fff;
+}
+
+.show-btn {
+  position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px; font-weight: 600;
+  color: #1565c0; cursor: pointer;
+  background: none; border: none;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.row-opts {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  animation: fadeIn 0.5s ease both 0.6s;
+}
+.remember {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; color: #555; cursor: pointer;
+}
+.remember input[type=checkbox] {
+  accent-color: #1565c0;
+  width: 14px; height: 14px; cursor: pointer;
+}
+.forgot {
+  font-size: 12px; color: #888; text-decoration: none;
+  transition: color 0.2s;
+}
+.forgot:hover { color: #1565c0; }
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(90deg, #1565c0, #1e88e5);
+  color: #fff;
+  border: none; border-radius: 8px;
+  padding: 13px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 15px; font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px rgba(21,101,192,0.3);
+  animation: fadeIn 0.5s ease both 0.68s;
+}
+.btn-primary:hover { opacity:0.92; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(21,101,192,0.38); }
+.btn-primary:active { transform: translateY(0); }
+
+.divider {
+  display: flex; align-items: center; gap: 10px;
+  margin: 16px 0;
+  animation: fadeIn 0.5s ease both 0.74s;
+}
+.divider span { font-size: 12px; color: #bbb; }
+.divider::before, .divider::after {
+  content: ''; flex: 1;
+  height: 1px; background: #e8ecf2;
+}
+
+.btn-outline {
+  width: 100%;
+  background: #fff;
+  color: #222;
+  border: 1.5px solid #dde3f0;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  animation: fadeIn 0.5s ease both 0.8s;
+}
+.btn-outline:hover { border-color: #1565c0; background: #f0f5ff; transform: translateY(-1px); }
+.btn-outline:active { transform: translateY(0); }
+
+.signup-row {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 12px; color: #888;
+  animation: fadeIn 0.5s ease both 0.88s;
+}
+.signup-row a {
+  color: #1565c0; font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.signup-row a:hover { opacity: 0.75; }
+
+/* Password toggle */
+#passField { padding-right: 56px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+
+    <!-- Spheres (3D balls) -->
+    <div style="position:absolute; bottom:18px; left:18px; display:flex; gap:14px; z-index:1;">
+      <div class="sphere" style="width:110px;height:110px;"></div>
+      <div class="sphere" style="width:72px;height:72px; align-self:flex-end; margin-bottom:10px;"></div>
+    </div>
+
+    <div class="left-text">
+      <h2>WELCOME</h2>
+      <p class="sub">Your Headline Name</p>
+      <p class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque hendrerit ultrices lectus vel lobortis neque laoreet.</p>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <h1>Sign in</h1>
+    <p class="tagline">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+    <!-- Username -->
+    <div class="field-wrap">
+      <span class="field-icon">👤</span>
+      <input class="field-input" type="text" id="userField" placeholder="User Name"/>
+    </div>
+
+    <!-- Password -->
+    <div class="field-wrap">
+      <span class="field-icon">🔒</span>
+      <input class="field-input" type="password" id="passField" placeholder="Password"/>
+      <button class="show-btn" id="togglePass" tabindex="-1">SHOW</button>
+    </div>
+
+    <!-- Remember / Forgot -->
+    <div class="row-opts">
+      <label class="remember">
+        <input type="checkbox" checked/> Remember me
+      </label>
+      <a href="#" class="forgot">Forgot Password?</a>
+    </div>
+
+    <!-- Sign In -->
+    <button class="btn-primary" id="signinBtn">Sign in</button>
+
+    <!-- Divider -->
+    <div class="divider"><span>or</span></div>
+
+    <!-- Sign in with other -->
+    <button class="btn-outline">Sign in with other</button>
+
+    <!-- Sign Up -->
+    <p class="signup-row">Don't have an account? <a href="#">Sign Up</a></p>
+  </div>
+</div>
+
+<script>
+  // Toggle password visibility
+  const togglePass = document.getElementById('togglePass');
+  const passField = document.getElementById('passField');
+  togglePass.addEventListener('click', () => {
+    if (passField.type === 'password') {
+      passField.type = 'text';
+      togglePass.textContent = 'HIDE';
+    } else {
+      passField.type = 'password';
+      togglePass.textContent = 'SHOW';
+    }
+  });
+
+  // Sign in button
+  const btn = document.getElementById('signinBtn');
+  btn.addEventListener('click', () => {
+    const user = document.getElementById('userField').value.trim();
+    const pass = passField.value;
+    if (!user || !pass) {
+      btn.style.background = 'linear-gradient(90deg,#b71c1c,#e53935)';
+      btn.textContent = 'Isi semua field!';
+      setTimeout(() => {
+        btn.style.background = '';
+        btn.textContent = 'Sign in';
+      }, 1800);
+      return;
+    }
+    btn.textContent = 'Masuk...';
+    btn.style.opacity = '0.7';
+    setTimeout(() => {
+      btn.style.opacity = '1';
+      btn.style.background = 'linear-gradient(90deg,#1b5e20,#2e7d32)';
+      btn.textContent = '✓ Berhasil Masuk';
+      setTimeout(() => {
+        btn.style.background = '';
+        btn.textContent = 'Sign in';
+      }, 2200);
+    }, 1200);
+  });
+</script>
+</body>
+</html>
