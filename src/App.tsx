@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -280,8 +281,9 @@ export default function SignInPage() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPass, setShowPass] = useState<boolean>(false);
-  const [remember, setRemember] = useState<boolean>(true);
-  const [btnState, setBtnState] = useState<ButtonState>("idle");
+    const [remember, setRemember] = useState<boolean>(true);
+    const [btnState, setBtnState] = useState<ButtonState>("idle");
+    const navigate = useNavigate();
 
   // Load Google Font
   useEffect(() => {
@@ -301,7 +303,10 @@ export default function SignInPage() {
     setBtnState("loading");
     setTimeout(() => {
       setBtnState("success");
-      setTimeout(() => setBtnState("idle"), 2200);
+      setTimeout(() => {
+        setBtnState("idle");
+        navigate("/landing");
+      }, 1000);
     }, 1200);
   };
 
