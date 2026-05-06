@@ -18,10 +18,7 @@ const RegistrationPage: React.FC = () => {
         }
     };
 
-    const itemVariants = {
-        hidden: { opacity: 0, x: -10 },
-        visible: { opacity: 1, x: 0 }
-    };
+
 
     return (
         <div className="bg-[#f8f9ff] text-[#0b1c30] min-h-screen flex flex-col font-['Plus_Jakarta_Sans']">
