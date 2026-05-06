@@ -1,604 +1,232 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { motion } from 'framer-motion';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+/**
+ * Pondok Pesantren Daarul Atqiya - Landing Page
+ * Re-written with TypeScript, Tailwind CSS, Vite Rules, and Framer Motion.
+ */
 
-type ButtonState = "idle" | "loading" | "success" | "error";
+// --- Components ---
 
-interface FieldProps {
-  id: string;
-  type: string;
-  placeholder: string;
-  icon: React.ReactNode;
-  value: string;
-  onChange: (v: string) => void;
-  delay?: number;
-  suffix?: React.ReactNode;
-}
-
-interface BlobProps {
-  size: number;
-  bottom?: number | string;
-  top?: number | string;
-  left?: number | string;
-  right?: number | string;
-  opacity?: number;
-  delay?: number;
-}
-
-// ─── Animation Variants ───────────────────────────────────────────────────────
-
-const cardVariants = {
-  hidden: { opacity: 0, scale: 0.92, y: 28 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
-const itemVariants = (delay: number = 0) => ({
-  hidden: { opacity: 0, y: 12 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut" as const, delay },
-  },
-});
-
-const blobVariants = (delay: number = 0) => ({
-  animate: {
-    y: [0, -14, 0],
-    scale: [1, 1.04, 1],
-    transition: {
-      duration: 6 + delay,
-      repeat: Infinity,
-      ease: "easeInOut" as const,
-      delay,
-    },
-  },
-});
-
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
-const Sphere: React.FC<{ size: number; className?: string }> = ({
-  size,
-  className = "",
-}) => (
-  <div
-    className={className}
-    style={{
-      width: size,
-      height: size,
-      borderRadius: "50%",
-      background:
-        "radial-gradient(circle at 35% 35%, #5baaf7, #1565c0 55%, #0d3d8a 100%)",
-      boxShadow:
-        "inset -6px -6px 18px rgba(0,0,0,0.35), inset 4px 4px 12px rgba(255,255,255,0.18), 0 8px 30px rgba(10,50,140,0.4)",
-      flexShrink: 0,
-    }}
-  />
-);
-
-const Blob: React.FC<BlobProps> = ({
-  size,
-  bottom,
-  top,
-  left,
-  right,
-  opacity = 0.12,
-  delay = 0,
-}) => (
-  <motion.div
-    variants={blobVariants(delay)}
-    animate="animate"
-    style={{
-      position: "absolute",
-      width: size,
-      height: size,
-      borderRadius: "50%",
-      background: `rgba(255,255,255,${opacity})`,
-      bottom,
-      top,
-      left,
-      right,
-      pointerEvents: "none",
-    }}
-  />
-);
-
-const FormField: React.FC<FieldProps> = ({
-  id,
-  type,
-  placeholder,
-  icon,
-  value,
-  onChange,
-  delay = 0,
-  suffix,
-}) => {
-  const [focused, setFocused] = useState(false);
-
+const Navbar: React.FC = () => {
   return (
-    <motion.div
-      variants={itemVariants(delay)}
-      initial="hidden"
-      animate="visible"
-      style={{ position: "relative", marginBottom: 16 }}
-    >
-      {/* Icon */}
-      <span
-        style={{
-          position: "absolute",
-          left: 12,
-          top: "50%",
-          transform: "translateY(-50%)",
-          color: "#1565c0",
-          fontSize: 16,
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      >
-        {icon}
-      </span>
-
-      <input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        style={{
-          width: "100%",
-          border: `1.5px solid ${focused ? "#1565c0" : "#dde3f0"}`,
-          borderRadius: 8,
-          padding: suffix ? "11px 56px 11px 40px" : "11px 16px 11px 40px",
-          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-          fontSize: 14,
-          color: "#222",
-          outline: "none",
-          background: focused ? "#fff" : "#f7f9fc",
-          boxShadow: focused ? "0 0 0 3px rgba(21,101,192,0.1)" : "none",
-          transition: "border-color 0.25s, box-shadow 0.25s, background 0.25s",
-        }}
-      />
-
-      {suffix && (
-        <span
-          style={{
-            position: "absolute",
-            right: 12,
-            top: "50%",
-            transform: "translateY(-50%)",
-          }}
-        >
-          {suffix}
-        </span>
-      )}
-    </motion.div>
+    <nav className="fixed top-0 z-50 w-full border-b border-emerald-100 bg-white/95 backdrop-blur-md dark:border-emerald-800/50 dark:bg-emerald-950/95 shadow-sm">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="text-xl font-bold uppercase tracking-tighter text-emerald-900 dark:text-emerald-50">
+          Daarul Atqiya
+        </div>
+        <div className="hidden space-x-6 text-sm font-medium tracking-tight md:flex">
+          <a className="rounded-md border-b-2 border-emerald-700 pb-1 font-bold text-emerald-700 transition-all active:scale-95 dark:border-emerald-400 dark:text-emerald-400" href="#">Beranda</a>
+          <a className="rounded-md text-slate-600 transition-all hover:bg-emerald-50/50 hover:text-emerald-800 active:scale-95 dark:text-slate-400 dark:hover:bg-emerald-900/30 dark:hover:text-emerald-200" href="#">Program</a>
+          <a className="rounded-md text-slate-600 transition-all hover:bg-emerald-50/50 hover:text-emerald-800 active:scale-95 dark:text-slate-400 dark:hover:bg-emerald-900/30 dark:hover:text-emerald-200" href="#">Info</a>
+          <a className="rounded-md text-slate-600 transition-all hover:bg-emerald-50/50 hover:text-emerald-800 active:scale-95 dark:text-slate-400 dark:hover:bg-emerald-900/30 dark:hover:text-emerald-200" href="#">Pendaftaran</a>
+        </div>
+        <button className="rounded-full bg-[#003527] px-6 py-2 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95">
+          Login/Status
+        </button>
+      </div>
+    </nav>
   );
 };
 
-// ─── Left Panel ───────────────────────────────────────────────────────────────
-
-const LeftPanel: React.FC = () => (
-  <div
-    style={{
-      width: "42%",
-      minWidth: "42%",
-      background: "linear-gradient(145deg, #1565c0 0%, #1976d2 55%, #1e88e5 100%)",
-      position: "relative",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      padding: "48px 40px",
-      overflow: "hidden",
-    }}
-  >
-    {/* Floating blobs */}
-    <Blob size={200} bottom={-60} left={-60} opacity={0.10} delay={0} />
-    <Blob size={130} bottom={40} left={90} opacity={0.14} delay={1.5} />
-    <Blob size={90} top={-30} right={-30} opacity={0.09} delay={2} />
-    <Blob size={55} top={60} left={20} opacity={0.08} delay={1} />
-
-    {/* 3D spheres */}
-    <div
-      style={{
-        position: "absolute",
-        bottom: 18,
-        left: 18,
-        display: "flex",
-        gap: 14,
-        alignItems: "flex-end",
-        zIndex: 1,
-      }}
-    >
-      <Sphere size={110} />
-      <Sphere size={72} className="" />
-    </div>
-
-    {/* Text */}
-    <div style={{ position: "relative", zIndex: 2 }}>
-      <motion.h2
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        style={{
-          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-          fontSize: 30,
-          fontWeight: 700,
-          color: "#fff",
-          letterSpacing: 1,
-          marginBottom: 6,
-        }}
-      >
-        WELCOME
-      </motion.h2>
-
-      <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        style={{
-          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-          fontSize: 13,
-          fontWeight: 500,
-          color: "rgba(255,255,255,0.8)",
-          letterSpacing: 2,
-          textTransform: "uppercase",
-          marginBottom: 14,
-        }}
-      >
-        Your Headline Name
-      </motion.p>
-
-      <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        style={{
-          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-          fontSize: 12,
-          color: "rgba(255,255,255,0.65)",
-          lineHeight: 1.7,
-        }}
-      >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-        hendrerit ultrices lectus vel lobortis neque laoreet. Proin euismod
-        sapien at purus pretium posuere.
-      </motion.p>
-    </div>
-  </div>
-);
-
-// ─── Main Component ───────────────────────────────────────────────────────────
-
-export default function SignInPage() {
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPass, setShowPass] = useState<boolean>(false);
-    const [remember, setRemember] = useState<boolean>(true);
-    const [btnState, setBtnState] = useState<ButtonState>("idle");
-    const navigate = useNavigate();
-
-  // Load Google Font
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500;700&display=swap";
-    document.head.appendChild(link);
-  }, []);
-
-  const handleSignIn = () => {
-    if (!username.trim() || !password) {
-      setBtnState("error");
-      setTimeout(() => setBtnState("idle"), 1800);
-      return;
-    }
-    setBtnState("loading");
-    setTimeout(() => {
-      setBtnState("success");
-      setTimeout(() => {
-        setBtnState("idle");
-        navigate("/landing");
-      }, 1000);
-    }, 1200);
-  };
-
-  const btnConfig: Record<
-    ButtonState,
-    { label: string; bg: string; opacity: number }
-  > = {
-    idle: {
-      label: "Sign in",
-      bg: "linear-gradient(90deg, #1565c0, #1e88e5)",
-      opacity: 1,
-    },
-    loading: {
-      label: "Signing in...",
-      bg: "linear-gradient(90deg, #1565c0, #1e88e5)",
-      opacity: 0.7,
-    },
-    success: {
-      label: "✓ Welcome!",
-      bg: "linear-gradient(90deg, #1b5e20, #2e7d32)",
-      opacity: 1,
-    },
-    error: {
-      label: "Fill all fields!",
-      bg: "linear-gradient(90deg, #b71c1c, #e53935)",
-      opacity: 1,
-    },
-  };
-
-  const current = btnConfig[btnState];
-
+const Hero: React.FC = () => {
   return (
-    <div
-      style={{
-        fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-        background: "linear-gradient(135deg, #1565c0 0%, #1976d2 40%, #42a5f5 100%)",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 20,
-      }}
-    >
-      {/* Card */}
+    <header className="relative overflow-hidden bg-[#d3e4fe] pb-24 pt-32 md:pb-32 md:pt-48">
+      <div className="absolute inset-0 z-0">
+        <img
+          alt="Pesantren Environment"
+          className="h-full w-full object-cover opacity-20"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_Bq_Ht01Oop0A83PI6sxx1tffmkJO-_Tg5FI4rfB-SujlOxr8NnAad0PVhe_CKcnI-DG_o-SKay-J3YhosT5aQkCsl97oobezMEyw5IgchODYu0sBH7p50dsammCppY5IqinUs6ZcNpsEwMPMrbDKAEmiiaTX0CDD5D7V5pFFZQupXCyo8PEYwLJU5p0lfltGg6g8rOiEtXuQXEGtxQCKlEu7Ua8Zw_BZywDnCfsRIShqY_1AfhXBm7urB788LvQ4ufr55VKuQHVo"
+        />
+      </div>
       <motion.div
-        variants={cardVariants}
-        initial="hidden"
-        animate="visible"
-        style={{
-          width: 820,
-          maxWidth: "100%",
-          minHeight: 440,
-          background: "#fff",
-          borderRadius: 20,
-          display: "flex",
-          overflow: "hidden",
-          boxShadow: "0 32px 80px rgba(10,60,160,0.35)",
-        }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 mx-auto max-w-7xl px-6 text-center"
       >
-        {/* ── Left ── */}
-        <LeftPanel />
-
-        {/* ── Right ── */}
-        <div
-          style={{
-            flex: 1,
-            padding: "44px 44px 40px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
-          <motion.h1
-            variants={itemVariants(0.3)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              fontSize: 26,
-              fontWeight: 700,
-              color: "#111",
-              marginBottom: 4,
-            }}
-          >
-            Sign in
-          </motion.h1>
-
-          <motion.p
-            variants={itemVariants(0.38)}
-            initial="hidden"
-            animate="visible"
-            style={{ fontSize: 12, color: "#888", marginBottom: 28 }}
-          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </motion.p>
-
-          {/* Username */}
-          <FormField
-            id="username"
-            type="text"
-            placeholder="User Name"
-            icon={<span style={{ fontSize: 15 }}>👤</span>}
-            value={username}
-            onChange={setUsername}
-            delay={0.45}
-          />
-
-          {/* Password */}
-          <FormField
-            id="password"
-            type={showPass ? "text" : "password"}
-            placeholder="Password"
-            icon={<span style={{ fontSize: 15 }}>🔒</span>}
-            value={password}
-            onChange={setPassword}
-            delay={0.52}
-            suffix={
-              <button
-                onClick={() => setShowPass((p) => !p)}
-                style={{
-                  fontSize: 11,
-                  fontWeight: 600,
-                  color: "#1565c0",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-                  letterSpacing: 0.5,
-                  padding: 0,
-                }}
-              >
-                {showPass ? "HIDE" : "SHOW"}
-              </button>
-            }
-          />
-
-          {/* Remember + Forgot */}
-          <motion.div
-            variants={itemVariants(0.6)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 22,
-            }}
-          >
-            <label
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 7,
-                fontSize: 12,
-                color: "#555",
-                cursor: "pointer",
-                userSelect: "none",
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-                style={{ accentColor: "#1565c0", width: 14, height: 14 }}
-              />
-              Remember me
-            </label>
-            <a
-              href="#"
-              style={{
-                fontSize: 12,
-                color: "#888",
-                textDecoration: "none",
-              }}
-            >
-              Forgot Password?
-            </a>
-          </motion.div>
-
-          {/* Sign In Button */}
-          <motion.button
-            variants={itemVariants(0.68)}
-            initial="hidden"
-            animate="visible"
-            whileHover={
-              btnState === "idle"
-                ? { y: -1, boxShadow: "0 8px 24px rgba(21,101,192,0.38)" }
-                : {}
-            }
-            whileTap={btnState === "idle" ? { scale: 0.98, y: 0 } : {}}
-            onClick={handleSignIn}
-            style={{
-              width: "100%",
-              background: current.bg,
-              color: "#fff",
-              border: "none",
-              borderRadius: 8,
-              padding: 13,
-              fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-              fontSize: 15,
-              fontWeight: 600,
-              letterSpacing: 0.3,
-              cursor: btnState === "loading" ? "not-allowed" : "pointer",
-              opacity: current.opacity,
-              boxShadow: "0 4px 18px rgba(21,101,192,0.3)",
-              transition: "background 0.3s, opacity 0.3s",
-            }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={btnState}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.2 }}
-                style={{ display: "block" }}
-              >
-                {current.label}
-              </motion.span>
-            </AnimatePresence>
-          </motion.button>
-
-          {/* Divider */}
-          <motion.div
-            variants={itemVariants(0.74)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              margin: "16px 0",
-            }}
-          >
-            <div style={{ flex: 1, height: 1, background: "#e8ecf2" }} />
-            <span style={{ fontSize: 12, color: "#bbb" }}>or</span>
-            <div style={{ flex: 1, height: 1, background: "#e8ecf2" }} />
-          </motion.div>
-
-          {/* Sign in with other */}
-          <motion.button
-            variants={itemVariants(0.8)}
-            initial="hidden"
-            animate="visible"
-            whileHover={{
-              borderColor: "#1565c0",
-              backgroundColor: "#f0f5ff",
-              y: -1,
-            }}
-            whileTap={{ scale: 0.98 }}
-            style={{
-              width: "100%",
-              background: "#fff",
-              color: "#222",
-              border: "1.5px solid #dde3f0",
-              borderRadius: 8,
-              padding: 12,
-              fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-              fontSize: 14,
-              fontWeight: 500,
-              cursor: "pointer",
-              transition: "border-color 0.2s, background 0.2s",
-            }}
-          >
-            Sign in with other
-          </motion.button>
-
-          {/* Sign Up */}
-          <motion.p
-            variants={itemVariants(0.88)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              textAlign: "center",
-              marginTop: 18,
-              fontSize: 12,
-              color: "#888",
-            }}
-          >
-            Don't have an account?{" "}
-            <a
-              href="#"
-              style={{
-                color: "#1565c0",
-                fontWeight: 600,
-                textDecoration: "none",
-              }}
-            >
-              Sign Up
-            </a>
-          </motion.p>
+        <h1 className="mx-auto mb-6 max-w-3xl text-4xl font-bold leading-tight text-[#003527] md:text-5xl">
+          Mendidik dengan Adab dan Ilmu
+        </h1>
+        <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-[#404944]">
+          Membangun generasi rabbani yang unggul dalam pemahaman agama, berakhlak mulia, dan siap menghadapi tantangan zaman dengan pondasi iman yang kokoh.
+        </p>
+        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <button className="rounded-full bg-[#003527] px-8 py-4 text-sm font-semibold text-white transition-shadow duration-300 hover:shadow-lg">
+            Daftar Sekarang
+          </button>
+          <button className="rounded-full border border-[#003527] px-8 py-4 text-sm font-semibold text-[#003527] transition-colors duration-300 hover:bg-[#eff4ff]">
+            Pelajari Program
+          </button>
         </div>
       </motion.div>
+    </header>
+  );
+};
+
+const VisionMission: React.FC = () => {
+  return (
+    <section className="bg-white py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          {/* Vision */}
+          <motion.div
+            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            viewport={{ once: true }}
+            className="rounded-xl border border-[#e2e2e2] bg-white p-8 shadow-sm"
+          >
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#064e3b] text-white">
+              <span className="material-symbols-outlined">visibility</span>
+            </div>
+            <h2 className="mb-4 text-3xl font-bold text-[#003527]">Visi Kami</h2>
+            <p className="leading-relaxed text-[#404944]">
+              Menjadi lembaga pendidikan Islam terkemuka yang melahirkan generasi hafal Al-Qur'an, faqih dalam ilmu agama, dan memiliki karakter kepemimpinan berbasis akhlakul karimah untuk kemaslahatan umat.
+            </p>
+          </motion.div>
+
+          {/* Mission */}
+          <motion.div
+            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 30 }}
+            viewport={{ once: true }}
+            className="rounded-xl border border-[#e2e2e2] bg-white p-8 shadow-sm"
+          >
+            <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#cca72f] text-white">
+              <span className="material-symbols-outlined">flag</span>
+            </div>
+            <h2 className="mb-4 text-3xl font-bold text-[#003527]">Misi Kami</h2>
+            <ul className="space-y-4 text-[#404944]">
+              {[
+                "Menyelenggarakan program tahfidz Al-Qur'an bersanad.",
+                "Mengkaji kitab turats (kitab kuning) dengan metode sistematis.",
+                "Membina karakter santri melalui pembiasaan adab harian."
+              ].map((item, index) => (
+                <li key={index} className="flex items-start">
+                  <span className="material-symbols-outlined mr-2 mt-1 text-[20px] text-[#003527]">check_circle</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const History: React.FC = () => {
+  return (
+    <section className="relative overflow-hidden bg-[#d3e4fe] py-20">
+      <div
+        className="absolute inset-0 opacity-5 pointer-events-none"
+        style={{ backgroundImage: 'radial-gradient(#003527 1px, transparent 1px)', backgroundSize: '20px 20px' }}
+      />
+      <div className="relative z-10 mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="mb-6 text-3xl font-bold text-[#003527]">Sejarah Singkat</h2>
+          <div className="rounded-xl bg-white p-8 text-left shadow-sm">
+            <p className="mb-4 leading-relaxed text-[#404944]">
+              Didirikan pada tahun 2010 oleh KH. Ahmad Fulan, Pondok Pesantren Daarul Atqiya bermula dari sebuah majelis taklim kecil di pinggiran kota. Berangkat dari keprihatinan atas krisis moral generasi muda, majelis ini perlahan berkembang menjadi sebuah institusi pendidikan formal dan non-formal.
+            </p>
+            <p className="leading-relaxed text-[#404944]">
+              Kini, dengan luas lahan mencapai 5 hektar, Daarul Atqiya telah meluluskan ribuan santri yang tersebar di berbagai universitas terkemuka, baik di dalam maupun luar negeri, membawa nilai-nilai adab dan ilmu ke tengah masyarakat luas.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Facilities: React.FC = () => {
+  const facilities = [
+    { title: "Gedung Tahfidz", desc: "Ruang kelas khusus hafalan Al-Qur'an dengan akustik optimal.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBzsVyECAebAvuMhkJN_3PK0wVTJRjwOOztDAKHTJ8yoATm4vnp1UXWRM4fKMHF-MgeeZIB8OQb160-BSsMxX_DEEGygfvw-kZTl7kv-OOuDRnr0wt4tCEma-HhJCq4QogI6p7kDG0fWZiTa4vsb-_l8G9aQdjqF-eaecFE8ZXiXewH3DTVDBA1f2dzxumc6Wn9Y7LsBzWFHuUcHpLo95nJFtOw53dVCR_MY-X7qBh_M1ByKWYC6HNj0EmltWxvKBYi-sClGpPmK8vu" },
+    { title: "Perpustakaan", desc: "Koleksi kitab kuning dan buku literatur modern lengkap.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCazy6OdIiu9OZwo_LaH5ub-_DtFY0eolRvXX5lDFgTBQT9WzLAr72WF3uVD5l48ufxXwvIxJZ0TSZDPIS9dd56QNWkx9Lu41Rh08mbLoUse1AD12W-42q13Bph82fJ9qyaAgMm91Ytl1Eny2ja73HTqyd0WXtN_-QLQ3zL-tDWmngi57MV3dcYXBLn72CyBG6qZZSNfQcLoy6hfGr92GjWm50xCWOPbSvk77S0_f00EbOumSTm6B6tKaC3P7KQDt7sNDY9_-uU_092" },
+    { title: "Masjid Jami'", desc: "Pusat kegiatan ibadah dengan kapasitas hingga 2000 jamaah.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD6WZ1_8wf8ZlaMZqA-lTlGgwr7e2WeSrIOU3GSQhsSVM-qhJh7aNv6eoTcPekk6V_MMPkU52neO2bIwYywjXPWib4eqWFLCYtzsaJcPOQKZYU3y4bjEJsV8ZNtTISW7ZZVmU7ewQWhRZxnXXI-hDyU9a4fKjweFz5Y7SABxhiehFJAa4ZcfsLjp69Ci1_8t1OI25s9ZXwQkFfxbGaOBXGcAGajUkiV3BbE1NHAQc4pKwo4aOnRa2EscgQYxec2sTmyMm5OjbRMINaW" },
+    { title: "Asrama", desc: "Tempat tinggal santri yang nyaman, bersih, dan diawasi 24 jam.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA_3fCVb7k77i13WdfxhEF8DOxMuakxChDalgANuXH_ENwyksBqe683qeMr4k8g0Lug22n3fH7ai5w-D-OeLZUYkaeFfU1YVelaGGbpIrrakkF2NSMgpZD26_iHfoxjTx1SGLdLYwcWGoIKdGQdr0VS8VPQu0HGuu6LXHOGiqy_jwLC4gOSVQuy9ZZIHuLT6UX5C0dp6IfOQQt_-Ub1gPYl1qizateO8TtfcQWrSwX2GevFO0qBrZp2gdZ2iiBfw7sBIet8gxaQaLvF" }
+  ];
+
+  return (
+    <section className="bg-white py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-[#003527]">Fasilitas Pondok</h2>
+          <p className="mx-auto max-w-2xl text-[#404944]">
+            Mendukung proses belajar mengajar dengan infrastruktur modern dan nyaman.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {facilities.map((item, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ y: -5 }}
+              className="overflow-hidden rounded-xl border border-[#e2e2e2] bg-white shadow-sm transition-all"
+            >
+              <div className="h-48 overflow-hidden">
+                <img src={item.img} alt={item.title} className="h-full w-full object-cover" />
+              </div>
+              <div className="p-6">
+                <h3 className="mb-2 text-xl font-bold text-[#003527]">{item.title}</h3>
+                <p className="text-sm text-[#404944]">{item.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Footer: React.FC = () => {
+  return (
+    <footer className="border-t border-emerald-800 bg-emerald-900 pb-8 pt-12 text-emerald-50 dark:bg-black dark:border-zinc-800">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 md:grid-cols-4">
+        <div className="col-span-1 md:col-span-2">
+          <span className="mb-4 block text-lg font-extrabold text-white">Daarul Atqiya</span>
+          <p className="max-w-sm text-emerald-200/70">
+            Membangun generasi rabbani yang unggul dalam pemahaman agama, berakhlak mulia, dan siap menghadapi tantangan zaman.
+          </p>
+        </div>
+        <div>
+          <h4 className="mb-4 font-bold text-white">Navigasi</h4>
+          <ul className="space-y-2 text-sm text-emerald-200/70">
+            <li><a className="transition-colors hover:text-white" href="#">Beranda</a></li>
+            <li><a className="transition-colors hover:text-white" href="#">Program</a></li>
+            <li><a className="transition-colors hover:text-white" href="#">Info</a></li>
+            <li><a className="transition-colors hover:text-white" href="#">Pendaftaran</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="mb-4 font-bold text-white">Informasi</h4>
+          <ul className="space-y-2 text-sm text-emerald-200/70">
+            <li><a className="transition-colors hover:text-white" href="#">Hubungi Kami</a></li>
+            <li><a className="transition-colors hover:text-white" href="#">Kebijakan Privasi</a></li>
+          </ul>
+        </div>
+      </div>
+      <div className="mt-12 border-t border-emerald-800/50 px-6 pt-8 text-center text-xs text-emerald-200/50">
+        © 2026 Pondok Pesantren Daarul Atqiya. Mendidik dengan Adab dan Ilmu.
+      </div>
+    </footer>
+  );
+};
+
+// --- Main Page ---
+
+const LandingPage: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-[#f8f9ff] font-['Plus_Jakarta_Sans'] antialiased">
+      <Navbar />
+      <main>
+        <Hero />
+        <VisionMission />
+        <History />
+        <Facilities />
+      </main>
+      <Footer />
     </div>
   );
-}
+};
+
+export default LandingPage;

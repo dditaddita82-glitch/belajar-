@@ -3,35 +3,52 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
-// Import komponen kamu
-import App from "./App.tsx";
-import SignIn from "./auth/signin.tsx";
-import SignUp from "./auth/signup.tsx";
-import LandingPage from "./pages/LandingPage.tsx";
-
-// 1. Buat konfigurasi router
+import App from "./App";
+import LandingPage from "./user/LandingPage";
+import SignIn from "./auth/signin";
+import SignUp from "./auth/signup";
+import DashboardPage from "./admin/DashboardPage";
+import AdmissionPage from "./admin/AdmissionPage";
+import ProgramPendidikan from "./user/ProgramPendidikan";
+import RegistrationPage from "./user/RegistrationPage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />, // Halaman utama
+    element: <App />, // parent
+
+  },
+  {
+    path: "/home",
+    element: <LandingPage />,
   },
   {
     path: "/signin",
-    element: <SignIn />, // Halaman Sign In
+    element: <SignIn />,
   },
   {
     path: "/signup",
-    element: <SignUp />, // Halaman Sign Up
+    element: <SignUp />,
   },
   {
-    path: "/landing",
-    element: <LandingPage />,
+    path: "/dashboard",
+    element: <DashboardPage />,
   },
+  {
+    path: "/admission",
+    element: <AdmissionPage />,
+  },
+  {
+    path: "/program",
+    element: <ProgramPendidikan />
+  },
+  {
+    path: "/registration",
+    element: <RegistrationPage />
+  }
 ]);
 
-// 2. Gunakan RouterProvider di dalam render
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>,
+  </StrictMode>
 );
